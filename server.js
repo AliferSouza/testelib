@@ -1,4 +1,4 @@
-const { router, server, } = require('./src/lib/serve.js');
+const { router, server, } = require('./moduleServe.js');
 const fs = require('fs');
 const path = require('path');
 
