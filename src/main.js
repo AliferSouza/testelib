@@ -1,11 +1,9 @@
 import {Router } from"./lib/index.js"
-import florecer from "./pages/home.js"
-import ajudar from "./pages/ajuda.js"
+import Pages from "./pages/index.js"
+import tags from "./components/index.js"
 
 
-
-Router({florecer, ajudar})
-
+Router(Pages, tags)
 
 
 

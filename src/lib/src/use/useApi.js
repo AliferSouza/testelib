@@ -1,6 +1,6 @@
-async function Api(url) {
+async function Api(url, method) {
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, method);
       const data = await res.json();
       const valorDta = await data;
       return valorDta;
