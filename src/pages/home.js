@@ -7,7 +7,8 @@ export default async function Home() {
  const url = useSearch("host")
   const protocol = useSearch("protocol")
   const data = await useApi(`${protocol}/db`)
-  console.log(data)
+  console.log(url)
+   console.log(protocol)
 
   function manipularElemento() {
     const a = document.querySelector('.container_home')
