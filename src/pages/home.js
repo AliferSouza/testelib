@@ -5,8 +5,8 @@ import { useExeFuc, useApi, useSearch } from "../lib/index.js"
 
 export default async function Home() {
  const url = useSearch("host")
-  const protocol = useSearch("protocol")
-  const data = await useApi(`${protocol}/db`)
+ const protocol = useSearch("protocol")
+ const data = await useApi(`${protocol}${url}/db`)
   console.log(url)
    console.log(protocol)
 
