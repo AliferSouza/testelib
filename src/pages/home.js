@@ -1,31 +1,36 @@
 import cardColaboradores from "../components/cardColaboradores.js"
-import relogio from "../components/relogio.js"
 import newsletter from "../components/newsletter.js"
 import cookie from "../components/cookie.js"
-import { useExeFuc } from "../lib/index.js"
+import { useExeFuc, useApi, useSearch } from "../lib/index.js"
 
 export default async function Home() {
+  const url = useSearch("host")
+  const data = await useApi(`https://${url}/db`)
+  console.log(data)
 
-  useExeFuc( function manipularElemento() {
+  function manipularElemento() {
     const a = document.querySelector('.container_home')
     a.addEventListener("click", e =>{
-    console.log(e)
+
     })
-    })
+  }
+  useExeFuc(manipularElemento)
 
 
   return ` 
-  <div class="container_home">  
+  <div class="container_home"> 
+
+ 
     <br>      
 
           <img src="./src/img/vivivi.png" alt="Logo" width="200" height="50" loading="lazy"> 
   
        
-          ${relogio()}
+          <comp-relogio data-id="1"> </comp-relogio>
+
           <br>  
           <br>    
-          <img src="./src/img/logoo.png" alt="Logo" width="280" height="280" loading="lazy"> 
-         
+          <img src="./src/img/logoo.png" alt="Logo" width="280" height="280" loading="lazy">       
           <br>   
           <br>   
           <br>        

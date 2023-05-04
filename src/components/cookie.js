@@ -13,11 +13,11 @@ export default function buttons() {
       alert('Por favor, marque a caixa para aceitar a política de privacidade.');
     }
   }
-  window.pegarResolver = () =>{
+  const pegarResolver = () =>{
     const lgpdBtn = document.querySelector('#lgpd-btn');
     const lgpdCard = document.querySelector('#lgpd-card');
     const aceiteLGPD = localStorage.getItem('aceiteLGPD');
-    console.log(aceiteLGPD)
+
     
     if (aceiteLGPD) {
       lgpdCard.style.display = 'none';
