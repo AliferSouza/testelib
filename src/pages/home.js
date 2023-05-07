@@ -1,35 +1,42 @@
 import cardColaboradores from "../components/cardColaboradores.js"
-import relogio from "../components/relogio.js"
 import newsletter from "../components/newsletter.js"
 import cookie from "../components/cookie.js"
-import { useExeFuc } from "../lib/index.js"
+import { useExeFuc, useApi, useSearch } from "../lib/index.js"
 
 export default async function Home() {
+  const url = useSearch("host")
+  const protocol = useSearch("protocol")
+  const data = await useApi(`${protocol}/db`)
 
-  useExeFuc( function manipularElemento() {
+
+
+  function manipularElemento() {
     const a = document.querySelector('.container_home')
     a.addEventListener("click", e =>{
-    console.log(e)
+
     })
-    })
+  }
+  useExeFuc(manipularElemento)
 
 
   return ` 
-  <div class="container_home">  
+  <div class="container_home"> 
+
+ 
     <br>      
 
           <img src="./src/img/vivivi.png" alt="Logo" width="200" height="50" loading="lazy"> 
   
        
-          ${relogio()}
+          <comp-relogio> </comp-relogio>
+
           <br>  
           <br>    
-          <img src="./src/img/logoo.png" alt="Logo" width="280" height="280" loading="lazy"> 
-         
+          <img src="./src/img/logoo.png" alt="Logo" width="280" height="280" loading="lazy">       
           <br>   
           <br>   
           <br>        
-          ${cardColaboradores()} 
+          <comp-cardcola></comp-cardcola>
                  
           <div class="container_home_texto">
             <h2>Workshop de Vivência - Espaço Jacarandá</h2>
@@ -81,7 +88,7 @@ export default async function Home() {
    
             
           </div>
-          ${newsletter()}
-          ${await cookie()}
+          <comp-newsletter> </comp-newsletter>
+         <comp-cookie></comp-cookie>
           `
 }
