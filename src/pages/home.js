@@ -4,6 +4,7 @@ import cookie from "../components/cookie.js"
 import { useExeFuc, useApi, useSearch } from "../lib/index.js"
 
 export default async function Home() {
+
   const url = useSearch("host")
   const protocol = useSearch("protocol")
   const data = await useApi(`${protocol}/db`)

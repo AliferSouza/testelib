@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const {server, router} = require('./servidor/server.js');
 
-router.get('/', (req, res) => {
+router.get('/', (req, res) => {  const userId = req.params.id;
   const filePath = path.join(__dirname, 'index.html');
 
   fs.readFile(filePath, (err, content) => {

@@ -17,4 +17,4 @@ const Emitter = {
     },
   };
 
-  export default Emitter
+export default Emitter

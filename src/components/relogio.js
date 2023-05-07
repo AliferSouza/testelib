@@ -1,5 +1,6 @@
 import { useExeFuc} from "../lib/index.js"
 export default function buttons(props) {
+  console.log(props)
   const dataAtual = new Date();
 // Obtém a data do final do ano
 const anoAtual = dataAtual.getFullYear();
