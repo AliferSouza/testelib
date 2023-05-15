@@ -1,9 +1,29 @@
-export default async function Ajuda() {
+export default function Ajuda(props) {
 
-  return ` 
-  <div class="container_home">    
-   <button></button>
-   <comp-relogio> </comp-relogio>
 
-  </div> `
+
+  const state = () => {
+
+    const a = document.querySelectorall(".container_home")
+    console.log(a)
+  }
+
+
+    const html = () =>{
+      return `
+      <div class="container_home">    
+        <button></button> 
+        <div style="display: flex;"> 
+        <comp-countdown>     </comp-countdown>
+        <comp-countdown>     </comp-countdown>    
+      </div>
+      <div>
+    `}
+  
+return{ html, state}
+
+
 }
+
+
+

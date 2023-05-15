@@ -1,13 +1,11 @@
-import cardColaboradores from "../components/cardColaboradores.js"
-import newsletter from "../components/newsletter.js"
-import cookie from "../components/cookie.js"
+
 import { useExeFuc, useApi, useSearch } from "../lib/index.js"
 
 export default async function Home() {
+
   const url = useSearch("host")
   const protocol = useSearch("protocol")
   const data = await useApi(`${protocol}/db`)
-
 
 
   function manipularElemento() {
@@ -19,6 +17,8 @@ export default async function Home() {
   useExeFuc(manipularElemento)
 
 
+
+
   return ` 
   <div class="container_home"> 
 
@@ -26,7 +26,7 @@ export default async function Home() {
     <br>      
 
           <img src="./src/img/vivivi.png" alt="Logo" width="200" height="50" loading="lazy"> 
-  
+    
        
           <comp-relogio> </comp-relogio>
 

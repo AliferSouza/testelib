@@ -1,68 +1,110 @@
 const ROOT = document.querySelector("#app")
 
-function customTags(sortedOut, components) {   
-    const ROOT = document.querySelector("#app") 
- 
-      try {
-        const tagNames  =  sortedOut.match(/<(comp-[a-z]+)/g)
-        const div = document.createElement("div")
-        div.innerHTML = sortedOut    
-  
-        if (!tagNames ) {
-          ROOT.innerHTML = sortedOut     
-          return 
-        }   
-    
-    
-  
-        tagNames.forEach(async (elem, i) => {  
-          const compAlgo = elem.match(/(comp-[a-z]+)/g)[0]; 
-          const elementDom = div.querySelector(compAlgo);
-     
-  
-          if (!elementDom) {
-            console.log(`Não foi possível encontrar a tag ${compAlgo}`);
-            return;
-          }
-         
-          const attributes = Object.entries(elementDom.dataset).reduce(
-            (acc, [key, value]) => {
-              acc[key] = value;
-              return acc;
-            },
-            {}
-          );    
-  
-         const newTag = document.createElement(`${compAlgo}-${i}`);          
-         elementDom.parentNode.replaceChild(newTag, elementDom);     
-         const nameTag = div.querySelector(`${compAlgo}-${i}`).tagName.toLowerCase()  
-         const dataApp = {
-            "referencia":i,
-            nameTag,
-            attributes,
-            
-         }           
-  
-         newTag.innerHTML = await components[compAlgo](dataApp);  
-  
-          
-          const tagNova = div.querySelector(`${compAlgo}-${i}`);
-          Object.entries(attributes).forEach(([key, value]) => {
-            tagNova.setAttribute(key, value);
-          });    
-           
-        });
-  
-        ROOT.innerHTML = "";
-        ROOT.appendChild(div)
-      } catch (error) {
-        console.error(error);
+
+function customTags(sortedOut, components) {  
+const stateApp = []
+const result = []
+const tags = []
+let newTag
+
+
+
+let parameter
+  if (location.href.includes("?")) {
+    const searchParams = new URLSearchParams(location.href.split("?")[1]);
+    parameter = Object.fromEntries(searchParams.entries());
+  }
+
+  let URL
+  const dataUrl = location.hash.replace("#", "") || location.pathname 
+    const match = dataUrl.match(/^\/(\w+)(\/)?/)
+    if (match && match[1]) {
+      URL = match[1]
+    }
+
+  let path;
+    if (URL) {
+      const regex = /\/\w+\/(.*)/;
+      const matches = URL.match(regex);
+      if (matches) {
+        path = matches[1].split('/');
       }
+    }
     
+
+
+  try {
+    const tagNames = sortedOut.match(/<(comp-[a-z]+)/g)
+    const div = document.createElement("div")
+    div.innerHTML = sortedOut    
+  
+    if (!tagNames) {
+      ROOT.innerHTML = sortedOut     
+      return 
+    }   
+   
+
     
+    tagNames.forEach(async (elem, i) => {  
+      const compAlgo = elem.match(/(comp-[a-z]+)/g)[0]; 
+      const elementDom = div.querySelector(compAlgo);
+  
+      if (!elementDom) {
+        console.log(`Não foi possível encontrar a tag ${compAlgo}`);
+        return;
+      }
+     
+      const attributes = Object.entries(elementDom.dataset).reduce(
+        (acc, [key, value]) => {
+          acc[key] = value;
+          return acc;
+        },
+        {}
+      );    
+  
+       newTag = document.createElement(`${compAlgo}-${i}`);          
+      elementDom.parentNode.replaceChild(newTag, elementDom);     
+      const nameTag = div.querySelector(`${compAlgo}-${i}`).tagName.toLowerCase()  
+
+      const tagNova = div.querySelector(`${compAlgo}-${i}`);
+      Object.entries(attributes).forEach(([key, value]) => {
+        tagNova.setAttribute(key, value);
+      });    
+
+      const dataApp = {
+        "referencia": i,
+        nameTag,
+        attributes,
+        parameter,
+        "pagina": URL,
+        path
+      }           
+      stateApp.push(dataApp) 
+      result.push(components[compAlgo](dataApp))  
+      tags.push(newTag)
+          
+    });  
+  
+
+    tags.forEach((ele, key)=>{
+      ele.innerHTML = result[key].html()
+    }) 
+
+    ROOT.innerHTML = "";
+    ROOT.appendChild(div)
+
+    tags.forEach((ele, key)=>{
+      result[key].state()
+    })
+ 
+
     
-    
+   
+  } catch (error) {
+    console.error(error);
+  }
 }
+
 
 function stateURL(Pages) {
   let URL
@@ -75,9 +117,6 @@ function stateURL(Pages) {
       URL = match[1]
     }
   }
-  
-
- 
 
   let currentPage =
     URL === "/" || URL === ""
@@ -91,12 +130,39 @@ function stateURL(Pages) {
 }
 
 async function render(Pages, selectedPage, components){
-    const sortedOut = await  Pages[selectedPage]();
+  let sortedOut = await  Pages[selectedPage]()
+  let state
+  let html
+  let style
 
+  if (typeof sortedOut.style === "function") {        
+    style = sortedOut.style
+  }
+
+    if (typeof sortedOut.html === "function") {        
+      html = sortedOut.html() 
+    }else{
+      html = sortedOut
+    }
+  
+
+    if (typeof sortedOut.state === "function") {        
+      state = sortedOut.state
+    }
+
+
+
+  
+
+
+   
     if(components === undefined){
-       ROOT.innerHTML =  sortedOut
+      ROOT.innerHTML =  html  
+      sortedOut.state()
+ 
     }else { 
-        customTags(sortedOut, components);
+        customTags(html, components);    
+     
     }  
     
 
@@ -127,15 +193,15 @@ function erroPage(Pages) {
 
 export default function Router(Pages, components) {
   function routerState() {
-   const  selectedPage = stateURL(Pages)
-  if(selectedPage === undefined ){
+   const selectedPage = stateURL(Pages) 
+   if(!selectedPage){
     
-  }else{
+   }
+   else{
     render(Pages, selectedPage, components)
-  }
+   }
   
   }
-  
   function handleClick(e) {
     if (e.target.matches("[data-href]")) {
       e.preventDefault();
